@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIAC 2.1 - Login</title>
+    <style>
+        body {
+            background-color: #008000;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .logo {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color:white;
+        }
+        .login-box {
+            max-width: 400px;
+            width: 80%;
+            padding: 20px;
+            background: white;
+            color: black;
+            border-radius: 10px;
+        }
+        .login-box h3 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .login-box input[type="text"],
+        .login-box input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            background: #008000;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-box button:hover {
+            background: #005700;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body style="background-image: url(./depositphotos_35401749-stock-photo-colour-abstract-background.jpg);">
+    <div class="container">
+        <div class="logo">
+            <center>
+                <marquee direction="left-right" scrollamount="4">
+                    <h1 style="color: rgb(251, 255, 0);">Ran Industrial Automation PVT LTD!</h1>
+                </marquee>
+            </center>
+        </div>
+        <div class="login-box">
+            <h3>Login</h3>
+            <form id="loginForm">
+                <input type="text" id="username" placeholder="Login Name" required />
+                <input type="password" id="password" placeholder="Password" required />
+                <button type="submit">Login</button>
+            </form>
+            <p id="error" style="color: red;"></p>
+        </div>
+        <div class="footer">
+            <p>VERSION: 2.1.1</p>
+        </div>
+    </div>
+
+    <script>
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevent the form from submitting normally
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const errorElement = document.getElementById('error');
+
+    console.log("Username: ", username);
+    console.log("Password: ", password);
+
+    // Clear any previous error message
+    errorElement.textContent = '';
+
+    try {
+        // Send login request to the backend API
+        const response = await fetch('http://localhost:5000/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // Check if login was successful
+            if (result.success) {
+                // Redirect to the success page on successful login
+                window.location.href = 'Sucess.html';
+            } else {
+                errorElement.textContent = result.message || 'Invalid credentials. Please try again.';
+            }
+        } else {
+            errorElement.textContent = 'An error occurred. Please try again later.';
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        errorElement.textContent = 'Network error: Could not reach the server. Please check your internet connection and try again later.';
+    }
+});
+
+  </script>
+    
+</body>
+</html>
